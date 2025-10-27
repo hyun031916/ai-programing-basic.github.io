@@ -180,6 +180,7 @@
                         <div class="flex flex-col p-6 bg-white rounded-lg shadow-lg">
                             <h3 class="mb-4 text-xl font-semibold text-slate-800">1. 강의 정보</h3>
                             <ul class="space-y-2 text-slate-700">
+                                <li><strong>교수:</strong> 고광호</li>
                                 <li><strong>주교재:</strong> 난생처음 데이터분석 with 파이썬 (한빛미디어)</li>
                                 <li><strong>부교재:</strong> 데이터분석을 위한 판다스 입문 (이지스퍼블리싱)</li>
                                 <li><strong>문의:</strong> i-campus 메시지 사용 필수</li>
@@ -583,6 +584,7 @@ hRabbit.feed()        # 자신의 feed 메서드 사용</code></pre>
 # 리스트로 Series 생성
 list_s = [1, 2, 3, 4]
 a = pd.Series(list_s)
+print("--- Series ---")
 print(a)
 
 # 딕셔너리로 DataFrame 생성
@@ -590,6 +592,7 @@ dict1 = { '이름' : {0:'한빛', 1:'한결', 2:'한라'},
           '성별' : {0:'남자', 1:'남자', 2:'여자'},
           '나이' : {0:'20', 1:'21', 2:'20'} }
 df1 = pd.DataFrame(dict1)
+print("\n--- DataFrame ---")
 print(df1)</code></pre>
                                     </div>
                                 </div>
@@ -601,6 +604,31 @@ print(df1)</code></pre>
                                         <li><code>.head(n)</code>: 상위 n개 데이터</li>
                                         <li><code>.tail(n)</code>: 하위 n개 데이터</li>
                                     </ul>
+                                    <div class="relative" x-data="{ copied: false, codeText: '' }" x-init="codeText = $el.querySelector('code').innerText">
+                                        <button @click="navigator.clipboard.writeText(codeText); copied = true; setTimeout(() => copied = false, 2000)"
+                                                :class="copied ? 'bg-green-600 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-200'"
+                                                class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
+                                            <span x-text="copied ? '복사됨!' : '복사'"></span>
+                                        </button>
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+data = {'이름': ['한빛', '한결', '한라', '준호', '가원', '규민'],
+        '성별': ['남자', '남자', '여자', '남자', '여자', '남자'],
+        '나이': [20, 21, 20, 30, 24, 23],
+        '키': [180, 177, 160, 183, 162, 179]}
+df = pd.DataFrame(data)
+
+print("--- .info() ---")
+df.info() # .info()는 print() 없이도 콘솔에 출력됩니다.
+
+print("\n--- .describe() ---")
+print(df.describe())
+
+print("\n--- .head(2) ---")
+print(df.head(2))
+
+print("\n--- .tail(2) ---")
+print(df.tail(2))</code></pre>
+                                    </div>
                                 </div>
                             </div>
 
@@ -617,16 +645,24 @@ print(df1)</code></pre>
                                                 class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
                                             <span x-text="copied ? '복사됨!' : '복사'"></span>
                                         </button>
-                                        <pre class="code-block"><code class="language-python"># df가 '이름', '성별', '나이', '키' 컬럼을 가진다고 가정
-# df.loc[2:4]           # 2번, 3번, 4번 행 선택 (loc는 끝점 포함)
-# df.loc[:, ['키', '나이']] # '키'와 '나이' 컬럼 선택
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+data = {'이름': ['한빛', '한결', '한라', '준호', '가원', '규민'],
+        '성별': ['남자', '남자', '여자', '남자', '여자', '남자'],
+        '나이': [20, 21, 20, 30, 24, 23],
+        '키': [180, 177, 160, 183, 162, 179]}
+df = pd.DataFrame(data)
 
-# 조건식으로 선택
-# '키'가 180 초과인 데이터
-df_tall = df.loc[df['키'] > 180]
+print("--- 2번, 3번, 4번 행 ---")
+print(df.loc[2:4]) # loc는 끝점(4) 포함
 
-# '성별'이 '여자'이고 '키'가 160 초과인 데이터
-df_cond = df.loc[(df['성별'] == '여자') & (df['키'] > 160)]</code></pre>
+print("\n--- '키', '나이' 컬럼 ---")
+print(df.loc[:, ['키', '나이']])
+
+print("\n--- '키' > 170 인 데이터 ---")
+print(df.loc[df['키'] > 170])
+
+print("\n--- '성별' == '여자' & '키' > 160 ---")
+print(df.loc[(df['성별'] == '여자') & (df['키'] > 160)])</code></pre>
                                     </div>
 
                                     <h4 class="font-medium mt-4 mb-2">.iloc (Integer-based)</h4>
@@ -637,8 +673,18 @@ df_cond = df.loc[(df['성별'] == '여자') & (df['키'] > 160)]</code></pre>
                                                 class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
                                             <span x-text="copied ? '복사됨!' : '복사'"></span>
                                         </button>
-                                        <pre class="code-block"><code class="language-python"># df.iloc[1:4]      # 1번, 2번, 3번 행 선택 (iloc는 끝점 미포함)
-# df.iloc[:, 0:3]   # 0번, 1번, 2번 열 선택</code></pre>
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+data = {'이름': ['한빛', '한결', '한라', '준호', '가원', '규민'],
+        '성별': ['남자', '남자', '여자', '남자', '여자', '남자'],
+        '나이': [20, 21, 20, 30, 24, 23],
+        '키': [180, 177, 160, 183, 162, 179]}
+df = pd.DataFrame(data)
+
+print("--- 1, 2, 3번 행 ---")
+print(df.iloc[1:4]) # iloc는 끝점(4) 미포함
+
+print("\n--- 0, 1, 2번 열 ---")
+print(df.iloc[:, 0:3])</code></pre>
                                     </div>
                                 </div>
                             </div>
@@ -653,6 +699,44 @@ df_cond = df.loc[(df['성별'] == '여자') & (df['키'] > 160)]</code></pre>
                                         <li><code>.reset_index()</code>: 인덱스를 리셋하고 기존 인덱스를 컬럼으로 추가</li>
                                         <li><code>.rename(columns={'A':'B'})</code>: 컬럼명 변경</li>
                                     </ul>
+                                    <div class="relative" x-data="{ copied: false, codeText: '' }" x-init="codeText = $el.querySelector('code').innerText">
+                                        <button @click="navigator.clipboard.writeText(codeText); copied = true; setTimeout(() => copied = false, 2000)"
+                                                :class="copied ? 'bg-green-600 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-200'"
+                                                class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
+                                            <span x-text="copied ? '복사됨!' : '복사'"></span>
+                                        </button>
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+data = {'이름': ['한빛', '한결', '한라', '준호'],
+        '성별': ['남자', '남자', '여자', '남자'],
+        '나이': [20, 21, 20, 30]}
+df = pd.DataFrame(data)
+print("--- 원본 ---")
+print(df)
+
+print("\n--- .drop(1, axis=0) : 1번 행 삭제 ---")
+df_dropped_row = df.drop(1, axis=0)
+print(df_dropped_row)
+
+print("\n--- .drop('성별', axis=1) : '성별' 열 삭제 ---")
+df_dropped_col = df.drop('성별', axis=1)
+print(df_dropped_col)
+
+print("\n--- .sort_values(by='나이', ascending=False) : 나이 내림차순 정렬 ---")
+df_sorted = df.sort_values(by='나이', ascending=False)
+print(df_sorted)
+
+print("\n--- .rename(columns={'나이':'Age'}) : '나이' -> 'Age' ---")
+df_renamed = df.rename(columns={'나이':'Age', '이름':'Name'})
+print(df_renamed)
+
+print("\n--- .set_index('이름') : '이름'을 인덱스로 ---")
+df_indexed = df.set_index('이름')
+print(df_indexed)
+
+print("\n--- .reset_index() : 인덱스 리셋 ---")
+df_reset = df_indexed.reset_index()
+print(df_reset)</code></pre>
+                                    </div>
                                 </div>
                                 <div>
                                     <h3 class="text-xl font-semibold mb-2">5. 그룹화 (Groupby)</h3>
@@ -663,12 +747,18 @@ df_cond = df.loc[(df['성별'] == '여자') & (df['키'] > 160)]</code></pre>
                                                 class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
                                             <span x-text="copied ? '복사됨!' : '복사'"></span>
                                         </button>
-                                        <pre class="code-block"><code class="language-python"># df가 '성별', '키' 컬럼을 가진다고 가정
-# 성별로 그룹화하여 키의 평균 계산
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+data = {'이름': ['한빛', '한결', '한라', '준호', '가원', '규민'],
+        '성별': ['남자', '남자', '여자', '남자', '여자', '남자'],
+        '나이': [20, 21, 20, 30, 24, 23],
+        '키': [180, 177, 160, 183, 162, 179]}
+df = pd.DataFrame(data)
+
+print("--- 성별 키 평균 ---")
 mean_by_gender = df.groupby(['성별'])['키'].mean()
 print(mean_by_gender)
 
-# 성별, 나이로 그룹화하여 키의 평균 계산
+print("\n--- 성별, 나이별 키 평균 ---")
 mean_by_group = df.groupby(['성별','나이'])['키'].mean()
 print(mean_by_group)</code></pre>
                                     </div>
@@ -688,16 +778,22 @@ print(mean_by_group)</code></pre>
                                                 class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
                                             <span x-text="copied ? '복사됨!' : '복사'"></span>
                                         </button>
-                                        <pre class="code-block"><code class="language-python"># Apply 예제
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+df_apply = pd.DataFrame({ "a": [10, 20, 30], "b": [20, 30, 40] })
+
 def my_sq(x):
     return x ** 2
-# 'a' 컬럼의 모든 값에 my_sq 함수 적용
-# sq = df['a'].apply(my_sq)
 
-# Map 예제 (성별을 0, 1로 변환)
+print("--- Apply 예제 ---")
+sq = df_apply['a'].apply(my_sq)
+print(sq)
+
+df_map = pd.DataFrame({'성별': ['남자', '여자', '남자']})
 rep_cond = {'남자':1, '여자':0}
-# df['성별_숫자'] = df['성별'].map(rep_cond)
-# print(df)</code></pre>
+
+print("\n--- Map 예제 ---")
+df_map['성별_숫자'] = df_map['성별'].map(rep_cond)
+print(df_map)</code></pre>
                                     </div>
                                 </div>
                             </div>
@@ -713,8 +809,13 @@ rep_cond = {'남자':1, '여자':0}
                                                 class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
                                             <span x-text="copied ? '복사됨!' : '복사'"></span>
                                         </button>
-                                        <pre class="code-block"><code class="language-python"># df1, df2, df3를 위아래로 연결 (ignore_index=True로 인덱스 재설정)
-# row_concat = pd.concat([df1, df2, df3], ignore_index=True)</code></pre>
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+df1 = pd.DataFrame({'A': ['A0', 'A1'], 'B': ['B0', 'B1']})
+df2 = pd.DataFrame({'A': ['A2', 'A3'], 'B': ['B2', 'B3']})
+
+print("--- Concat (행) ---")
+row_concat = pd.concat([df1, df2], ignore_index=True)
+print(row_concat)</code></pre>
                                     </div>
 
                                     <h4 class="font-medium mt-4 mb-2">Merge (병합)</h4>
@@ -725,8 +826,15 @@ rep_cond = {'남자':1, '여자':0}
                                                 class="absolute top-2 right-2 text-xs font-semibold py-1 px-2 rounded transition-colors z-10">
                                             <span x-text="copied ? '복사됨!' : '복사'"></span>
                                         </button>
-                                        <pre class="code-block"><code class="language-python"># 'site' 데이터와 'visited' 데이터를 'name'과 'site' 컬럼을 기준으로 병합
-# sv = site.merge(visited, left_on='name', right_on='site')</code></pre>
+                                        <pre class="code-block"><code class="language-python">import pandas as pd
+person = pd.DataFrame({'ident': ['DR-1', 'DR-3', 'MSK-4'],
+                     'personal': ['Dyer', 'Lake', 'Pabodie']})
+visited = pd.DataFrame({'ident': ['DR-1', 'DR-3', 'MSK-4'],
+                      'site': ['Station A', 'Station B', 'Station C']})
+
+print("\n--- Merge 예제 ---")
+merged_df = person.merge(visited, left_on='ident', right_on='ident')
+print(merged_df)</code></pre>
                                     </div>
                                 </div>
                             </div>
